@@ -1,0 +1,19 @@
+.user-download-files table {
+    border: 1px solid #EDEDED;
+}
+.user-download-files tr td {
+    padding: 6px 10px;
+}
+.user-download-files tr.even {
+    background-color: #E6E6E6;
+}
+.user-download-files tr th {
+    background-color: #C5C5C5;
+    padding: 6px 10px;
+}
+.useruploadforms .red{
+    color: red;
+}
+.useruploadforms .green{
+    color: green;
+}

@@ -1,0 +1,15 @@
+.ff-repeatable .ff-add-template {
+	display: none;
+}
+.ff-repeatable th, .ff-repeatable td {
+	padding: 0.75em;
+	text-align: left;
+	vertical-align: top;
+}
+.ff-repeatable img {
+	vertical-align: middle;
+	cursor: pointer;
+}
+.ff-repeatable .button{
+    width: 83px;
+}
