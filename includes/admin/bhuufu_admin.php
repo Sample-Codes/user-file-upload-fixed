@@ -9,7 +9,7 @@ class Bhuppu_Admin {
         register_activation_hook(BHUUFU_PLUGIN_FILE, array(&$this, 'activation'));
         add_action('admin_init', array(&$this, 'enqueue'), 10);
         add_action('edit_user_profile', array(&$this, 'add_user_file_upload_fields'));
-        add_action('edit_user_profile_update', array(&$this, 'save_user_file_upload_fields'));
+        add_action('edit_user_profile_update', array($this, 'save_user_file_upload_fields'));
         add_filter('upload_dir', array(&$this, 'user_upload_files_dir'));
         add_shortcode('list_user_files', array(&$this, 'user_uploaded_files_list'));
         add_filter('the_posts', array(&$this, 'conditionally_add_scripts_and_styles'));
@@ -45,7 +45,7 @@ class Bhuppu_Admin {
     //change upload directory
     public function user_upload_files_dir($upload) {
         //check if this a user-edit page
-        $current_page = basename($_SERVER['HTTP_REFERER']);
+        $current_page = basename(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
         $current_page_tmp = explode("?", $current_page);
         $current_page = $current_page_tmp[0];
         if ($current_page != "user-edit.php")
@@ -114,101 +114,108 @@ class Bhuppu_Admin {
         ?>
         <h3><?php _e('File Uploads', 'wpcf7'); ?></h3>
         <div class="ff-repeatable">
-            <table>
-                <thead>
-                    <tr>
-                        <th><?php _e('Url', 'wpcf7'); ?></th>
-                        <th><?php _e('Name', 'wpcf7'); ?></th>
-                        <th><?php _e('Decsription', 'wpcf7'); ?></th>
-                        <th><img alt="Add Row" class="ff-add-row" src="<?php echo BHUUFU_URL; ?>assets/images/add.png"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="ff-add-template" style="">
-                        <td><input type="text" name="bhuufu-user-uploads[file_url_tmp][]" class="medium-text file_url" value="" /></td>
-                        <td><input type="text" name="bhuufu-user-uploads[file_name_tmp][]" class="medium-text file_name" value="" /></td>
-                        <td><input type="text" name="bhuufu-user-uploads[file_description_tmp][]" class="medium-text file_description" value="" /></td>
-                        <td>
-                            <input type="hidden" name="bhuufu-user-uploads[file_id_tmp][]" class="medium-text file_id" value="" />
-                            <input type="hidden" name="bhuufu-user-uploads[file_oname_tmp][]" class="medium-text file_oname" value="" />
-                            <input type="hidden" name="bhuufu-user-uploads[file_mime_tmp][]" class="medium-text file_mime" value="" />
-                            <input class="button _unique_name_button" name="_unique_name_button" value="Select File" />
-                            <img alt="Remove Row" class="ff-remove-row" src="<?php echo BHUUFU_URL; ?>assets/images/remove.png">
-                        </td>
-                    </tr>
-                    <?php
-                    if (isset($bhu_uufef['file_url']) && $extra_fields = array_filter($bhu_uufef['file_url'])) {
-                        foreach ($extra_fields as $key => $value) {
-                            echo'
-                     <tr>
-                        <td><input type="text" name="bhuufu-user-uploads[file_url_tmp][]" class="medium-text file_url" value="' . $bhu_uufef['file_url'][$key] . '" /></td>
-                        <td><input type="text" name="bhuufu-user-uploads[file_name_tmp][]" class="medium-text file_name" value="' . $bhu_uufef['file_name'][$key] . '" /></td>
-                        <td><input type="text" name="bhuufu-user-uploads[file_description_tmp][]" class="medium-text file_description" value="' . $bhu_uufef['file_description'][$key] . '" /></td>
-                        <td>
-                        <input type="hidden" name="bhuufu-user-uploads[file_id_tmp][]" class="medium-text file_id" value="' . $bhu_uufef['file_id'][$key] . '" />
-                        <input type="hidden" name="bhuufu-user-uploads[file_oname_tmp][]" class="medium-text file_oname" value="' . $bhu_uufef['file_oname'][$key] . '" />
-                        <input type="hidden" name="bhuufu-user-uploads[file_mime_tmp][]" class="medium-text file_mime" value="' . $bhu_uufef['file_mime'][$key] . '" />
-                        <input class="button _unique_name_button" name="_unique_name_button" value="Select File" />
-                        <img alt="Remove Row" class="ff-remove-row" src="' . BHUUFU_URL . 'assets/images/remove.png">
-                        </td>
-                    </tr>';
-                        }
-                    } else {
-                        echo'
-                     <tr>
-                        <td><input type="text" name="bhuufu-user-uploads[file_url_tmp][]" class="medium-text file_url" value="" /></td>
-                        <td><input type="text" name="bhuufu-user-uploads[file_name_tmp][]" class="medium-text file_name" value="" /></td>
-                        <td><input type="text" name="bhuufu-user-uploads[file_description_tmp][]" class="medium-text file_description"  value="" /></td>
-                        <td>
-                        <input type="hidden" name="bhuufu-user-uploads[file_id_tmp][]" class="medium-text file_id" value="" />
-                        <input type="hidden" name="bhuufu-user-uploads[file_oname_tmp][]" class="medium-text file_oname" value="" />
-                        <input type="hidden" name="bhuufu-user-uploads[file_mime_tmp][]" class="medium-text file_mime" value="" />
-                        <input class="button _unique_name_button" name="_unique_name_button" value="Select File" />
-                        <img alt="Remove Row" class="ff-remove-row" src="' . BHUUFU_URL . 'assets/images/remove.png">
-                        </td> 
-                    </tr>';
-                    }
-                    ?>
-                </tbody>			
-            </table>
+          <table class="widefat">
+            <thead>
+              <tr>
+                <th><?php echo __('Url', 'user-file-upload-v5'); ?></th>
+                <th><?php echo __('Name', 'user-file-upload-v5'); ?></th>
+                <th><?php echo __('Description', 'user-file-upload-v5'); ?></th>
+                <th>
+                  <input type="button" class="ff-add-row button button-primary" value="<?php echo __('Add row','user-file-upload-v5'); ?>">
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="ff-add-template" style="">
+                <td><input type="text" name="bhuufu-user-uploads[file_url_tmp][]" class="medium-text file_url" value="" placeholder="file name(url)" required/></td>
+                <td><input type="text" name="bhuufu-user-uploads[file_name_tmp][]" class="medium-text file_name" value="" placeholder="file name" required/></td>
+                <td><input type="text" name="bhuufu-user-uploads[file_description_tmp][]" class="medium-text file_description" value="" /></td>
+                <td>
+                  <input type="hidden" name="bhuufu-user-uploads[file_id_tmp][]" class="medium-text file_id" value="" />
+                  <input type="hidden" name="bhuufu-user-uploads[file_oname_tmp][]" class="medium-text file_oname" value="" />
+                  <input type="hidden" name="bhuufu-user-uploads[file_mime_tmp][]" class="medium-text file_mime" value="" />
+                  <input class="button _unique_name_button" name="_unique_name_button" value="Select File" />
+                  <input type="button" class="ff-remove-row button" value="<?php echo __('Delete'); ?>">
+                </td>
+              </tr>
+              <?php
+                if ( isset($bhu_uufef['file_url']) && $extra_fields = array_filter($bhu_uufef['file_url']) ) {
+                  foreach ($extra_fields as $key => $value) {
+              ?>
+                <tr>
+                  <td><input type="text" name="bhuufu-user-uploads[file_url_tmp][]" class="medium-text file_url" value="<?php echo $bhu_uufef['file_url'][$key]; ?>" placeholder="file name(url)" required/></td>
+                  <td><input type="text" name="bhuufu-user-uploads[file_name_tmp][]" class="medium-text file_name" value="<?php echo $bhu_uufef['file_name'][$key]; ?>" placeholder="file name" required/></td>
+                  <td><input type="text" name="bhuufu-user-uploads[file_description_tmp][]" class="medium-text file_description" value="<?php echo $bhu_uufef['file_description'][$key]; ?>" /></td>
+                  <td>
+                    <input type="hidden" name="bhuufu-user-uploads[file_id_tmp][]" class="medium-text file_id" value="<?php echo $bhu_uufef['file_id'][$key]; ?>" />
+                    <input type="hidden" name="bhuufu-user-uploads[file_oname_tmp][]" class="medium-text file_oname" value="<?php echo $bhu_uufef['file_oname'][$key]; ?>" />
+                    <input type="hidden" name="bhuufu-user-uploads[file_mime_tmp][]" class="medium-text file_mime" value="<?php echo $bhu_uufef['file_mime'][$key]; ?>" />
+                    <input class="button _unique_name_button" name="_unique_name_button" value="Select File" />
+                    <input type="button" class="ff-remove-row button" value="<?php echo __('Delete'); ?>">
+                  </td>
+                </tr>
+              <?php
+                  }
+                }
+                else {
+              ?>
+                <tr>
+                  <td><input type="text" name="bhuufu-user-uploads[file_url_tmp][]" class="medium-text file_url" value="" placeholder="file name(url)" required/></td>
+                  <td><input type="text" name="bhuufu-user-uploads[file_name_tmp][]" class="medium-text file_name" value="" placeholder="file name" required/></td>
+                  <td><input type="text" name="bhuufu-user-uploads[file_description_tmp][]" class="medium-text file_description"  value="" /></td>
+                  <td>
+                  <input type="hidden" name="bhuufu-user-uploads[file_id_tmp][]" class="medium-text file_id" value="" />
+                  <input type="hidden" name="bhuufu-user-uploads[file_oname_tmp][]" class="medium-text file_oname" value="" />
+                  <input type="hidden" name="bhuufu-user-uploads[file_mime_tmp][]" class="medium-text file_mime" value="" />
+                  <input class="button _unique_name_button" name="_unique_name_button" value="Select File" />
+                  <input type="button" class="ff-remove-row button" value="<?php echo __('Delete'); ?>">
+                  </td> 
+                </tr>
+              <?php
+                }
+              ?>
+            </tbody>			
+          </table>
         </div>
         <?php
     }
 
 //user porfile fields save
     public function save_user_file_upload_fields($user_id) {
-        if (isset($_POST['bhuufu-user-uploads']['file_url_tmp']) && $extra_fields = array_filter($_POST['bhuufu-user-uploads']['file_url_tmp'])) {
-            foreach ($extra_fields as $key => $value) {
-                $_POST['bhuufu-user-uploads']['file_url'][] = $_POST['bhuufu-user-uploads']['file_url_tmp'][$key];
-                $_POST['bhuufu-user-uploads']['file_name'][] = $_POST['bhuufu-user-uploads']['file_name_tmp'][$key];
-                $_POST['bhuufu-user-uploads']['file_description'][] = $_POST['bhuufu-user-uploads']['file_description_tmp'][$key];
-                $_POST['bhuufu-user-uploads']['file_id'][] = $_POST['bhuufu-user-uploads']['file_id_tmp'][$key];
-                $_POST['bhuufu-user-uploads']['file_oname'][] = $_POST['bhuufu-user-uploads']['file_oname_tmp'][$key];
-                $_POST['bhuufu-user-uploads']['file_mime'][] = $_POST['bhuufu-user-uploads']['file_mime_tmp'][$key];
-            }
+      $body = '';
+      $user = get_userdata( $user_id );
+      $blog_title = get_bloginfo('name');
+      $options = get_option( 'bhuufu_settings' );
+      $pagelink =  get_page_link($options['filespage']);
+      if ( isset($_POST['bhuufu-user-uploads']['file_url_tmp']) ) {
+        $extra_fields = array_filter($_POST['bhuufu-user-uploads']['file_url_tmp']);
+        foreach ($extra_fields as $key => $value) {
+          $_POST['bhuufu-user-uploads']['file_url'][] = $_POST['bhuufu-user-uploads']['file_url_tmp'][$key];
+          $_POST['bhuufu-user-uploads']['file_name'][] = $_POST['bhuufu-user-uploads']['file_name_tmp'][$key];
+          $_POST['bhuufu-user-uploads']['file_description'][] = $_POST['bhuufu-user-uploads']['file_description_tmp'][$key];
+          $_POST['bhuufu-user-uploads']['file_id'][] = $_POST['bhuufu-user-uploads']['file_id_tmp'][$key];
+          $_POST['bhuufu-user-uploads']['file_oname'][] = $_POST['bhuufu-user-uploads']['file_oname_tmp'][$key];
+          $_POST['bhuufu-user-uploads']['file_mime'][] = $_POST['bhuufu-user-uploads']['file_mime_tmp'][$key];
+          $body .= $_POST['bhuufu-user-uploads']['file_name_tmp'][$key] . ' has been added to your account. Please <a href="'. $pagelink .'">login</a> to download the file.\n';
         }
-		
-		$user = get_userdata( $user_id );
-		$blog_title = get_bloginfo('name');
-		
-		$options = get_option( 'bhuufu_settings' );
-		$pagelink =  get_page_link($options['filespage']);
-				
-		$to = $user->user_email;
-		$subject = $blog_title . ' new file added';
-		$body = $_POST['bhuufu-user-uploads']['file_name_tmp'][$key] . ' has been added to your account. Please <a href="'. $pagelink .'">login</a> to download the file.';
-		$headers = array('Content-Type: text/html; charset=UTF-8');
+        update_user_meta($user_id, 'user_file_uploads', $_POST['bhuufu-user-uploads']);
+        $to = $user->user_email;
+        $subject = $blog_title . ' new file added';
+        $headers = array('Content-Type: text/html; charset=UTF-8');
 
-		wp_mail( $to, $subject, $body, $headers );
-		
+        wp_mail( $to, $subject, $body, $headers );
+
         unset($_POST['bhuufu-user-uploads']['file_url_tmp']);
         unset($_POST['bhuufu-user-uploads']['file_name_tmp']);
         unset($_POST['bhuufu-user-uploads']['file_description_tmp']);
         unset($_POST['bhuufu-user-uploads']['file_id_tmp']);
         unset($_POST['bhuufu-user-uploads']['file_oname_tmp']);
         unset($_POST['bhuufu-user-uploads']['file_mime_tmp']);
-        update_user_meta($user_id, 'user_file_uploads', $_POST['bhuufu-user-uploads']);
-
+        
+      }
+      else {
+        update_user_meta($user_id, 'user_file_uploads', '');
+      }
     }
 
     //delete file
@@ -244,7 +251,8 @@ class Bhuppu_Admin {
         if (is_user_logged_in()) {
             //list all files uploaded for user
             global $current_user;
-            $output = "";
+            include_once(BHUUFU_PATH . '/includes/user/files-list.php');
+            /*$output = "";
             $bhu_uufef = get_user_meta($current_user->ID, 'user_file_uploads', true);
             if (isset($bhu_uufef['file_url']) && $extra_fields = array_filter($bhu_uufef['file_url'])) {
                 $count = 1;
@@ -288,13 +296,13 @@ class Bhuppu_Admin {
                         </tbody>
                     </table>";
             $final_html = "<div class='user-download-files' >" . $table . "</div>";
-            return $final_html;
+            return $final_html;*/
         } else {
             $form = isset($_REQUEST['form']) ? $_REQUEST['form'] : '';
 			
 			$returnData = '';
 			if($form == 'lostpassword') {
-				$returnData .= '<div class="useruploadforms">';
+				/*$returnData .= '<div class="useruploadforms">';
 				global $post ;
 				if (is_wp_error($this->errors)){
 					$errors = $this->errors;
@@ -329,14 +337,15 @@ class Bhuppu_Admin {
 				$returnData .= '<input type="hidden" name="do_process" value="lostpassword" />';
 				$returnData .= '</p>';
 				$returnData .= '</form>';
-				$returnData .= '</div>';
-				
+				$returnData .= '</div>';*/
+				include_once(BHUUFU_PATH . '/includes/user/forms/lostpassword-form.php');
 				
 				
 			}
 			else
 				if($form == 'resetpassword') {
-					$returnData .= '<div class="useruploadforms">';
+          include_once(BHUUFU_PATH . '/includes/user/forms/resetpassword-form.php');
+					/*$returnData .= '<div class="useruploadforms">';
 					global $post ;
 					if(is_wp_error($this->errors)){
 						$errors = $this->errors;
@@ -368,7 +377,7 @@ class Bhuppu_Admin {
 					$returnData .= '<input type="hidden" name="action" value="resetpass" />';
 					$returnData .= '</p>';
 					$returnData .= '</form>';
-					$returnData .= '</div>';
+					$returnData .= '</div>';*/
 
 				}
 				else {
@@ -399,15 +408,15 @@ class Bhuppu_Admin {
 							}
 					} 
 					else
-						if( isset($_GET['resetpass']) && $_GET['resetpass'] == "complete"){
+						/*if( isset($_GET['resetpass']) && $_GET['resetpass'] == "complete"){
 							$returnData .= "<p class='green'>Password sucessfully changed.Now try to login again </p>";
 						}
 					do_action( 'login_head' );
 					if ($error) {
 						$returnData .= "<p class='red'>$error</p>";
-					}
-					
-					$returnData .= '<form name="loginform" id="loginform" action="" method="post">';
+					}*/
+          include_once(BHUUFU_PATH . '/includes/user/forms/login-form.php');
+					/*$returnData .= '<form name="loginform" id="loginform" action="" method="post">';
 				    $returnData .= '<p class="login-username">';
             		$returnData .= '<label for="user_login">Username</label>';
             		$returnData .= '<input type="text" name="log" id="user_login" class="input" value="" size="20">';
@@ -425,12 +434,11 @@ class Bhuppu_Admin {
 					$returnData .= "<a href='".$url."form=lostpassword' > Lost your password ?</a>";
 					$returnData .= '</p>';
 					$returnData .= '</form>';
-					$returnData .= '</div>';
+					$returnData .= '</div>';*/
 				}
-			
-			return $returnData;
-            
-        }
+
+        //return $returnData;
+      }
     }
 
     //to handle login,reset,new password

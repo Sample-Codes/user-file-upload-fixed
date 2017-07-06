@@ -5,6 +5,8 @@
  * Version: 1.5
  * Author: James Willson
  * License: GPL2
+ * Text Domain: user-file-upload-v5
+ * Domain Path: /lang
  */
  
 /*

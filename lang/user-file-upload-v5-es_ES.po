@@ -1,0 +1,115 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: User File Upload\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-06 20:30+0000\n"
+"PO-Revision-Date: 2017-07-06 20:30+0000\n"
+"Last-Translator: rhonalf <rhonalf.martinez@koombea.com>\n"
+"Language-Team: Spanish (Spain)\n"
+"Language: es-ES\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#: includes/user/files-list.php:2
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+#: includes/user/files-list.php:11
+msgid "Welcome"
+msgstr "Bienvenido"
+
+#: includes/admin/bhuufu_admin.php:120
+msgid "Url"
+msgstr "Url"
+
+#: includes/admin/bhuufu_admin.php:121
+msgid "Name"
+msgstr "Nombre"
+
+#: includes/admin/bhuufu_admin.php:122
+msgid "Description"
+msgstr "Descripción"
+
+#: includes/admin/bhuufu_admin.php:124
+msgid "Add row"
+msgstr "Agregar fila"
+
+#: includes/user/files-list.php:8
+msgid "Your files"
+msgstr "Tus archivos"
+
+#: includes/user/files-list.php:25 includes/user/files-list.php:25
+msgid "Download"
+msgstr "Descargar"
+
+#: includes/user/files-list.php:43
+msgid "Thanks for trusting Kreative!"
+msgstr "¡Gracias por confiar en Kreative!"
+
+#: includes/user/files-list.php:50
+msgid "There are no files available. Do you search for any content?"
+msgstr "No hay archivos disponibles. ¿Buscas algún contenido?"
+
+#: includes/user/files-list.php:51
+msgid "Contact us"
+msgstr "Contáctanos"
+
+#: includes/user/forms/login-form.php:15
+msgid "Client login"
+msgstr "Inicio de sesión de cliente"
+
+#: includes/user/forms/login-form.php:20
+#: includes/user/forms/lostpassword-form.php:8
+msgid "Enter your username or e-mail"
+msgstr "Ingrese su usuario o e-mail"
+
+#: includes/user/forms/login-form.php:28
+msgid "Login"
+msgstr "Iniciar sesión"
+
+#: includes/user/forms/login-form.php:31
+msgid "Forgot your password?"
+msgstr "Olvidó su contraseña?"
+
+#: includes/user/forms/lostpassword-form.php:2
+msgid "Forgot password?"
+msgstr "Olvidó la contraseña?"
+
+#: includes/user/forms/lostpassword-form.php:6
+msgid ""
+"Please enter your username or email address. You will receive a link to "
+"create a new password via email."
+msgstr ""
+"Por favor ingrese su usuario o dirección de correo. Recibirá un enlace para "
+"crear una nueva contraseña vía email"
+
+#: includes/user/forms/lostpassword-form.php:7
+msgid "Username or E-mail:"
+msgstr "Usuario o email"
+
+#: includes/user/forms/lostpassword-form.php:30
+msgid ""
+"Instructions to reset your password have been sent to you. Please check your "
+"email."
+msgstr ""
+"Las instrucciones para restablecer su contraseña le han sido enviadas. Por "
+"favor verifique su email."
+
+#: includes/user/forms/resetpassword-form.php:27
+msgid "The credentials are wrong"
+msgstr "Las credenciales son erróneas"
+
+#. Name of the plugin
+msgid "User File Upload"
+msgstr "User File Upload"
+
+#. Description of the plugin
+msgid "User File Upload Manager"
+msgstr "User File Upload Manager"
+
+#. Author of the plugin
+msgid "James Willson"
+msgstr "James Wilson"
